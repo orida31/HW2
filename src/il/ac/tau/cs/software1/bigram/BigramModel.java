@@ -1,5 +1,10 @@
 package il.ac.tau.cs.software1.bigram;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -78,46 +83,35 @@ public class BigramModel {
      * @post: mVocabulary = prev(mVocabulary)
      * @post: mBigramCounts = prev(mBigramCounts)
      */
-
-    public static boolean contains(string [] arr, String w1){ // check if a word in Arrey
-        for (String w2 : arr){
-                if (w1 == w2){
-                    return true;
-                }
-            }
-        return false;
-    }
-
-    public static String [] make_it_compact(String [] arr){ // delete an empty cells from the end of Array
-
-        int length = 0;
-
-        for (String w : arr){
-            if (w != null){
-                length++;
-            }
-        }
-
-        String [] compact_arr = new String[length];
-        for (int i = 0; i<length; i++){
-            compact_arr[i] = arr[i];
-        }
-        return compact_arr;
-    }
-
-
     public String[] buildVocabularyIndex(String fileName) throws IOException { // Question 1
         
         String [] long_voc = new String[BigramModel.MAX_VOCABULARY_SIZE];
-        String [] words = fileName.split(" ");
-        int idx = 0;
-        for (String w : words){
-             if (not(contain(long_voc,w))){
-                long_voc[idx] = w;
-                idx++;
-             }
+        File fromFile = new File(fileName);
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(fromFile));
+        String line;
+        
+        int count = 0;
+        while((line = bufferedReader.readLine()) != null){
+            String [] Tockens = line.trim().split("\\s+");
+            for (String Tocken : Tockens){
+                String cur_Tocken = normalizeWord(Tocken);
+                if (cur_Tocken != null && count < MAX_VOCABULARY_SIZE && findIndex(long_voc, cur_Tocken) == ELEMENT_NOT_FOUND){
+                    long_voc [count] = cur_Tocken;
+                    count++;
+                }
+            }
         }
-        return make_it_compact(long_voc);
+        bufferedReader.close();
+
+        String [] shorted_voc = new String [count];
+        for (int idx = 0; idx < count; idx++){
+            if (long_voc[idx] == null){
+                break;
+            }
+            shorted_voc[idx] = long_voc[idx];
+        }
+        return shorted_voc;
+        
     }
 
 
