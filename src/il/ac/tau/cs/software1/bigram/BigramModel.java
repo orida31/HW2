@@ -200,7 +200,7 @@ public class BigramModel {
             Matt_cnt[Integer.parseInt(Tockens[0])][Integer.parseInt(Tockens[1])] = Integer.parseInt(Tockens[2]);
         }
         
-        bufferedReader.close();
+        bufferedReader2.close();
         this.mBigramCounts = Matt_cnt;
         this.mVocabulary = voc;
         
