@@ -78,10 +78,48 @@ public class BigramModel {
      * @post: mVocabulary = prev(mVocabulary)
      * @post: mBigramCounts = prev(mBigramCounts)
      */
-    public String[] buildVocabularyIndex(String fileName) throws IOException { // Question 1
-        // TODO: implement
-        return null;
+
+    public static boolean contains(string [] arr, String w1){ // check if a word in Arrey
+        for (String w2 : arr){
+                if (w1 == w2){
+                    return true;
+                }
+            }
+        return false;
     }
+
+    public static String [] make_it_compact(String [] arr){ // delete an empty cells from the end of Array
+
+        int length = 0;
+
+        for (String w : arr){
+            if (w != null){
+                length++;
+            }
+        }
+
+        String [] compact_arr = new String[length];
+        for (int i = 0; i<length; i++){
+            compact_arr[i] = arr[i];
+        }
+        return compact_arr;
+    }
+
+
+    public String[] buildVocabularyIndex(String fileName) throws IOException { // Question 1
+        
+        String [] long_voc = new String[BigramModel.MAX_VOCABULARY_SIZE];
+        String [] words = fileName.split(" ");
+        int idx = 0;
+        for (String w : words){
+             if (not(contain(long_voc,w))){
+                long_voc[idx] = w;
+                idx++;
+             }
+        }
+        return make_it_compact(long_voc);
+    }
+
 
     /*
      * @post: mVocabulary = prev(mVocabulary)
