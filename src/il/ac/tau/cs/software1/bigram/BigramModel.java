@@ -134,7 +134,7 @@ public class BigramModel {
                 int curr_idx = findIndex(vocabulary, curr_tk);
                 int next_idx = findIndex(vocabulary, next_tk);
                 
-                if(curr_idx != -1 && next_idx != -1){
+                if(curr_idx != ELEMENT_NOT_FOUND && next_idx != ELEMENT_NOT_FOUND){
                     Matt_cnt[curr_idx][next_idx] += 1;
                 }
              }
@@ -213,8 +213,29 @@ public class BigramModel {
      * @post: if sentence is probable, according to the model, $ret = true, else, $ret = false
      */
     public boolean isLegalSentence(String sentence) { // Question 5
-        // TODO: implement
-        return false;
+        String [] Tockens = sentence.trim().split(" ");
+        if (sentence.equals("") || sentence == null || sentence == ""){
+            return true;
+        }
+        if (Tockens.length == 1){
+            if (findIndex(this.mVocabulary, Tockens[0]) != ELEMENT_NOT_FOUND){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        for(int i = 0; i < Tockens.length - 1; i++){
+            int curr_idx = findIndex(this.mVocabulary, Tockens[i]);
+            int next_idx = findIndex(this.mVocabulary, Tockens[i+1]);
+            if (curr_idx == ELEMENT_NOT_FOUND || next_idx == ELEMENT_NOT_FOUND){
+                return false;
+            }
+            if(this.mBigramCounts[curr_idx][next_idx] <= 0){
+                return false;
+            }
+        }
+        return true;
     }
 
     ///////////////////////////////////////////////////////////////////////////
